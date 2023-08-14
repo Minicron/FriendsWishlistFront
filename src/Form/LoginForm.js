@@ -1,8 +1,8 @@
 // LoginForm.js
 import React, { useState } from 'react';
-import cookie from 'cookie';
 
-const LoginForm = ({ onSignupLinkClick, onLoginSuccess }) => {
+const LoginForm = ({ onSignupLinkClick, onLoginSuccess, onForgetPasswordLinkClick }) => {
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -48,7 +48,7 @@ const LoginForm = ({ onSignupLinkClick, onLoginSuccess }) => {
                         onChange={(e) => setUsername(e.target.value)}
                     />
                 </div>
-                <div className="mb-4">
+                <div>
                     <label htmlFor="password" className="block font-semibold mb-1">Password</label>
                     <input
                         type="password"
@@ -59,6 +59,7 @@ const LoginForm = ({ onSignupLinkClick, onLoginSuccess }) => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
+                <a href='#' className="text-blue-500 hover:underline float-right mb-4" onClick={onForgetPasswordLinkClick}>Forgot your password?</a>
                 <button type="submit" className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Login</button>
             </form>
             <p className="text-red-500 mt-2">{message}</p>

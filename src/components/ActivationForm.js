@@ -13,7 +13,7 @@ const ActivationForm = () => {
 
     // Extract the token from the URL
     const urlParams = new URLSearchParams(location.search);
-    const token = urlParams.get('token');
+    const token = urlParams.get('activationToken');
 
     const handleSubmit = async (e) => {
         e.preventDefault();

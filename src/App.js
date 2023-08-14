@@ -6,6 +6,8 @@ import WishlistGrid from './components/WishlistGrid';
 import WishlistForm from './components/WishlistForm';
 import WishlistDetail from './components/WishlistDetail';
 import ActivationForm from './components/ActivationForm';
+import ForgetPasswordForm from './Form/ForgetPasswordForm';
+import ResetPasswordForm from './Form/ResetPasswordForm';
 import cookie from 'cookie';
 import Header from './components/Header';
 import { useLocation } from 'react-router-dom';
@@ -22,7 +24,10 @@ const App = () => {
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [showWishlistDetail, setShowWishlistDetail] = useState(false);
     const [showActivationForm, setShowActivationForm] = useState(false);
+    const [showForgetPassword, setShowForgetPassword] = useState(false);
+    const [showResetPasswordForm, setShowResetPasswordForm] = useState(false);
     const [signupSuccessMessage, setSignupSuccessMessage] = useState('');
+    const [resetPasswordSuccessMessage, setResetPasswordSuccessMessage] = useState('');
 
     const location = useLocation();
 
@@ -30,16 +35,26 @@ const App = () => {
     let failedQueue = [];
 
     useEffect(() => {
+
         const urlParams = new URLSearchParams(location.search);
-        const urlToken = urlParams.get('token');
-        if (urlToken) {
+
+        // Token d'activation dans l'URL ?
+        const urlActivationToken = urlParams.get('activationToken');
+        if (urlActivationToken) {
             // Faites quelque chose avec le token, comme le vérifier ou afficher un formulaire spécial
             setShowActivationForm(true);
+        }
+
+        // Token de réinitialisation du mot de passe dans l'URL ?
+        const urlResetPasswordToken = urlParams.get('resetPasswordToken');
+        if (urlResetPasswordToken) {
+            setShowResetPasswordForm(true);
         }
 
         // Récupère le cookie "token" et vérifie s'il existe
         const cookies = cookie.parse(document.cookie);
         const token = cookies.token;
+
         // Détermine si l'utilisateur est connecté en fonction de la présence du cookie "token"
         setIsLoggedIn(!!token);
     }, [location]);
@@ -131,10 +146,29 @@ const App = () => {
         setSignupSuccessMessage(message);
     }
 
+    const handleResetPasswordSuccess = (message) => {
+        setShowResetPasswordForm(false);
+        setShowLogin(true);
+        setResetPasswordSuccessMessage(message);
+    }
+
+    const handleLoginAccessFromForgetPassword = () => {
+        setShowForgetPassword(false);
+        setShowLogin(true);
+        setSignupSuccessMessage('');
+    }
+
+    const handleForgotPasswordLinkClick = () => {
+        setShowLogin(false);
+        setShowForgetPassword(true);
+
+    };
+
     // Fonction pour gérer la connexion réussie
     const handleLoginSuccess = (token, refreshToken, username) => {
         setIsLoggedIn(true);
         setSignupSuccessMessage('');
+        setResetPasswordSuccessMessage('');
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('username', username);
@@ -153,6 +187,14 @@ const App = () => {
         );
     }
 
+    if(showResetPasswordForm) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-gray-100">
+                <ResetPasswordForm onResetSuccess={handleResetPasswordSuccess}/>
+            </div>
+        );
+    }
+
     // Si l'utilisateur n'est pas connecté, affiche simplement le formulaire de connexion
     if (!isLoggedIn) {
         return (
@@ -160,13 +202,21 @@ const App = () => {
                 {showLogin ? (
                     <>
                         {signupSuccessMessage ? (
-                            <ToastComponent signupSuccessMessage={signupSuccessMessage} />
+                            <ToastComponent message={signupSuccessMessage} />
+                        ) : null}
+                        {resetPasswordSuccessMessage ? (
+                            <ToastComponent message={resetPasswordSuccessMessage} />
                         ) : null}
                         <LoginForm
                             onSignupLinkClick={() => setShowLogin(false)}
-                            onLoginSuccess={handleLoginSuccess} // Passe la fonction handleLoginSuccess au composant LoginForm
+                            onLoginSuccess={handleLoginSuccess}
+                            onForgetPasswordLinkClick={handleForgotPasswordLinkClick}
                         />
                     </>
+                ) : showForgetPassword ? (
+                    <ForgetPasswordForm
+                        onLoginLinkClick={handleLoginAccessFromForgetPassword}
+                    />
                 ) : (
                     <SignupForm
                         onLoginLinkClick={() => setShowLogin(true)}
