@@ -14,7 +14,7 @@ const AddItemForm = ({ wishlistId, onItemAdded }) => {
 
         try {
             const response = await axios.post(
-                `http://localhost:5000/wishlist/${wishlistId}/item`,
+                process.env.REACT_APP_BACKEND_URL + '/wishlist/${wishlistId}/item',
                 { name, description, url },
                 {
                     headers: {
