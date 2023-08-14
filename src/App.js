@@ -58,7 +58,6 @@ const App = () => {
     // Fonction pour afficher les détails de la wishlist sélectionnée
     const handleWishlistClick = async (wishlistId) => {
 
-        console.log('Wishlist clicked:', wishlistId);
         // Appel à l'API pour récupérer les détails de la wishlist sélectionnée
         try {
             const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/wishlist/' + wishlistId, {
