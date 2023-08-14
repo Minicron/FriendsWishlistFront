@@ -27,7 +27,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const fetchLoggedInUser = async () => {
         try {
             const response = await axios.get(
-                '/user/me',
+                process.env.REACT_APP_BACKEND_URL + '/user/me',
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const fetchAffectedUsers = async () => {
         try {
             const response = await axios.get(
-                `/wishlist/${wishlist.id}/users`,
+                process.env.REACT_APP_BACKEND_URL + `/wishlist/${wishlist.id}/users`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const fetchWishlistItems = async () => {
         try {
             const response = await axios.get(
-                `/wishlist/${wishlist.id}/items`,
+                process.env.REACT_APP_BACKEND_URL + `/wishlist/${wishlist.id}/items`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const handleReserveItem = async (itemId) => {
         try {
             const response = await axios.post(
-                `/reservation`,
+                process.env.REACT_APP_BACKEND_URL + `/reservation`,
                 {
                     item_id: itemId,
                     reservingUser_id: loggedInUser.id,
@@ -97,7 +97,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const handleCancelReserveItem = async (itemId) => {
         try {
             const response = await axios.delete(
-                `/reservation/${itemId}`,
+                process.env.REACT_APP_BACKEND_URL + `/reservation/${itemId}`,
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -119,7 +119,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         if (confirmed) {
             try {
                 const response = await axios.put(
-                    `/wishlist/${wishlist.id}/close`,
+                    process.env.REACT_APP_BACKEND_URL + `/wishlist/${wishlist.id}/close`,
                     {},
                     {
                         headers: {

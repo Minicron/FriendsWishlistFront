@@ -12,7 +12,7 @@ const InviteUserForm = ({ wishlistId, onClose }) => {
 
         try {
             const response = await axios.post(
-                `http://localhost:5000/wishlist/invite/${wishlistId}`,
+                process.env.REACT_APP_BACKEND_URL + `/wishlist/invite/${wishlistId}`,
                 { invitationMail },
                 {
                     headers: {
