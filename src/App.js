@@ -10,6 +10,7 @@ import cookie from 'cookie';
 import Header from './components/Header';
 import { useLocation } from 'react-router-dom';
 import axios from "axios";
+import ToastComponent from "./components/ToastComponent";
 
 const App = () => {
 
@@ -21,6 +22,8 @@ const App = () => {
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [showWishlistDetail, setShowWishlistDetail] = useState(false);
     const [showActivationForm, setShowActivationForm] = useState(false);
+    const [signupSuccessMessage, setSignupSuccessMessage] = useState('');
+
     const location = useLocation();
 
     let isRefreshing = false;
@@ -124,9 +127,15 @@ const App = () => {
         setIsLoggedIn(false);
     };
 
+    const handleSignupSuccess = (message) => {
+        setShowLogin(true);
+        setSignupSuccessMessage(message);
+    }
+
     // Fonction pour gérer la connexion réussie
     const handleLoginSuccess = (token, refreshToken, username) => {
         setIsLoggedIn(true);
+        setSignupSuccessMessage('');
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
         localStorage.setItem('username', username);
@@ -150,14 +159,19 @@ const App = () => {
         return (
             <div className="flex justify-center items-center min-h-screen bg-gray-100">
                 {showLogin ? (
-                    <LoginForm
-                        onSignupLinkClick={() => setShowLogin(false)}
-                        onLoginSuccess={handleLoginSuccess} // Passe la fonction handleLoginSuccess au composant LoginForm
-                    />
+                    <>
+                        {signupSuccessMessage ? (
+                            <ToastComponent signupSuccessMessage={signupSuccessMessage} />
+                        ) : null}
+                        <LoginForm
+                            onSignupLinkClick={() => setShowLogin(false)}
+                            onLoginSuccess={handleLoginSuccess} // Passe la fonction handleLoginSuccess au composant LoginForm
+                        />
+                    </>
                 ) : (
                     <SignupForm
                         onLoginLinkClick={() => setShowLogin(true)}
-                        onLoginSuccess={handleLoginSuccess} // Passe la fonction handleLoginSuccess au composant SignupForm (s'il y a une fonction d'inscription réussie)
+                        onSignupSuccess={handleSignupSuccess}
                     />
                 )}
             </div>

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const SignupForm = ({ onLoginLinkClick }) => {
+const SignupForm = ({ onLoginLinkClick, onSignupSuccess }) => {
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,7 +29,7 @@ const SignupForm = ({ onLoginLinkClick }) => {
             });
 
             if (response.status === 200) {
-                setError('Account created successfully! You can now log in.');
+                onSignupSuccess('Account created successfully! You can now log in.');
             } else {
                 setError(response.data.message);
             }

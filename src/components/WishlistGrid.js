@@ -17,17 +17,25 @@ const WishlistGrid = ({ onWishlistClick, onDisplayWishlistForm }) => {
     }, []);
 
     const fetchUserWishlist = async () => {
+
         try {
             const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/user/wishlist', {
                 headers: {
                     "x-access-token": localStorage.getItem('token'),
                 },
             });
-            // Stocke l'id de l'utilisateur dans l'état userId
-            setWishlists(response.data);
-            setHasWishlists(true);
+
+            if (response.status === 200) {
+
+                // Stocke l'id de l'utilisateur dans l'état userId
+                setWishlists(response.data);
+                setHasWishlists(true);
+
+            } else if (response.status === 404) {
+                console.log('No wishlist found for this user.');
+            }
         } catch (error) {
-            console.error('Error fetching user data:', error);
+            console.log(error);
         }
     };
 
