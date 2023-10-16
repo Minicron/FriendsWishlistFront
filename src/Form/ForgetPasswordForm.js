@@ -33,6 +33,7 @@ const ForgetPasswordForm = ({ onLoginLinkClick }) => {
     return (
         <div className="w-96 p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-4">Forget Password</h2>
+            {message && <p className="text-green-500 mb-2">{message}</p>}
             <form onSubmit={handleForgetPassword}>
                 <div className="mb-4">
                     <label htmlFor="email" className="block font-semibold mb-1">Email</label>
