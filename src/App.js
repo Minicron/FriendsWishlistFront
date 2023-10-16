@@ -121,6 +121,12 @@ const App = () => {
                     }
                 } catch (err) {
                     processQueue(err, null);
+                    // Supprimez les tokens du local storage
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("refreshToken");
+                    localStorage.removeItem("username");
+                    // Mettez à jour l'état pour déconnecter l'utilisateur
+                    setIsLoggedIn(false);
                     return Promise.reject(err);
                 }
             }
