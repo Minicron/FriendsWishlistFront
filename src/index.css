@@ -20,3 +20,22 @@ code {
     font-size: 0.8rem;
     color: #808080;
 }
+
+.masonry-grid {
+    display: flex;
+    width: 100%;
+    margin-left: 0;
+}
+
+.masonry-grid_column {
+    padding-left: 1%;  /* ajustez cette valeur si nécessaire */
+    width: 33.33%;  /* pour trois colonnes de tailles égales */
+    background-clip: padding-box;
+}
+
+.tuile {
+    /* autres styles pour chaque tuile, si nécessaire */
+    margin-bottom: 30px;
+    width: 100%;  /* assurez-vous que la tuile prend la largeur complète de la colonne */
+}
+

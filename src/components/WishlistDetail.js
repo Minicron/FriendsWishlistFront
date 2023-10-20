@@ -3,6 +3,7 @@ import axios from 'axios';
 import InviteUserForm from '../Form/InviteUserForm';
 import AddItemForm from '../Form/AddItemForm';
 import { BsFillCartCheckFill, BsFillCartFill, BsCartX } from 'react-icons/bs';
+import Masonry from 'react-masonry-css';
 
 const WishlistDetail = ({ wishlist, onBackClick }) => {
 
@@ -12,6 +13,13 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const [showAddItemForm, setShowAddItemForm] = useState(false);
     const [showAddUserForm, setAddUserUserForm] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState(null);
+    const breakpointColumnsObj = {
+        default: 3,  // 3 colonnes par défaut
+        1100: 3,
+        700: 2,
+        500: 1
+    };
+
 
     useEffect(() => {
         fetchAffectedUsers();
@@ -196,77 +204,82 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                     <AddItemForm wishlistId={wishlist.id} onItemAdded={handleHideAddItemForm} onClose={handleHideAddItemForm} />
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 grid-flow-row">
-                    {/* Affiche les éléments de la wishlist pour chaque utilisateur */}
-                    {affectedUsers.map((user) => (
-                        <div key={user.id} className="bg-white border border-gray-300 p-4 rounded-md shadow-md min-h-fit" >
-                            {loggedInUser!= null && loggedInUser.id === user.id ? (
-                                <h3 className="text-lg font-semibold">{user.username} (you) </h3>
-                            ) : (
-                                <h3 className="text-lg font-semibold">{user.username}</h3>
-                            )}
-                            <ul>
-                                {items
-                                    .filter((item) => item.userId === user.id)
-                                    .map((item) => (
-                                        <li className="bg-white mt-3 border border-gray-300 p-4 rounded-md hover:bg-gray-100 hover:shadow-md flex justify-between items-center" key={item.id}>
-                                            <div className="flex flex-col justify-start">
-                                                <div>
-                                                    <p className="font-bold">{item.itemName}</p>
+                <div className="gap-4 p-4">
+                    <Masonry
+                        breakpointCols={breakpointColumnsObj}
+                        className="masonry-grid"
+                        columnClassName="masonry-grid_column"
+                    >
+                        {affectedUsers.map((user) => (
+                            <div key={user.id} className="bg-white border border-gray-300 p-4 rounded-md shadow-md min-h-fit tuile" >
+                                {loggedInUser!= null && loggedInUser.id === user.id ? (
+                                    <h3 className="text-lg font-semibold">{user.username} (you) </h3>
+                                ) : (
+                                    <h3 className="text-lg font-semibold">{user.username}</h3>
+                                )}
+                                <ul>
+                                    {items
+                                        .filter((item) => item.userId === user.id)
+                                        .map((item) => (
+                                            <li className="bg-white mt-3 border border-gray-300 p-4 rounded-md hover:bg-gray-100 hover:shadow-md flex justify-between items-center" key={item.id}>
+                                                <div className="flex flex-col justify-start">
+                                                    <div>
+                                                        <p className="font-bold">{item.itemName}</p>
+                                                    </div>
+                                                    <div>
+                                                        <p className="TileSub">{item.description}</p>
+                                                    </div>
+                                                    {item.url && (
+                                                        <div className="truncate w-full max-w-xs">
+                                                            <a
+                                                                href={item.url}
+                                                                title={item.url}
+                                                                className="TileSub mt-3 italic truncate"
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                            >
+                                                                {item.url}
+                                                            </a>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                                <div>
-                                                    <p className="TileSub">{item.description}</p>
-                                                </div>
-                                                {item.url && (
-                                                    <div className="truncate w-full max-w-xs">
-                                                        <a
-                                                            href={item.url}
-                                                            title={item.url}
-                                                            className="TileSub mt-3 italic truncate"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
+                                                <div className="flex items-center">
+                                                    {!item.reserved && loggedInUser != null && loggedInUser.id !== user.id ? (
+                                                        <button
+                                                            className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                                                            onClick={() => handleReserveItem(item.id)}
                                                         >
-                                                            {item.url}
-                                                        </a>
-                                                    </div>
-                                                )}
-                                            </div>
-                                            <div className="flex items-center">
-                                                {!item.reserved && loggedInUser != null && loggedInUser.id !== user.id ? (
-                                                    <button
-                                                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
-                                                        onClick={() => handleReserveItem(item.id)}
-                                                    >
-                                                        <BsFillCartFill />
-                                                    </button>
-                                                ) : item.reserved && loggedInUser != null && loggedInUser.id !== user.id ? (
-                                                    <div className="flex items-center">
-                                                        <BsFillCartCheckFill className="text-green-500" />
-                                                        {item.Reservations[0].User.id === loggedInUser.id ? (
-                                                            <>
-                                                                <p className="text-sm text-gray-500 ml-2">You reserved this</p>
-                                                                <button
-                                                                    className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none"
-                                                                    onClick={() => handleCancelReserveItem(item.id)}
-                                                                >
-                                                                    <BsCartX className="text-white-500" />
-                                                                </button>
-                                                            </>
-                                                        ) : (
-                                                            <p className="text-sm text-gray-500 ml-2">Reserved by {item.Reservations[0].User.username}</p>
-                                                        )}
-                                                    </div>
-                                                ) : null}
-                                            </div>
-                                        </li>
-                                    ))}
-                            </ul>
+                                                            <BsFillCartFill />
+                                                        </button>
+                                                    ) : item.reserved && loggedInUser != null && loggedInUser.id !== user.id ? (
+                                                        <div className="flex items-center">
+                                                            <BsFillCartCheckFill className="text-green-500" />
+                                                            {item.Reservations[0].User.id === loggedInUser.id ? (
+                                                                <>
+                                                                    <p className="text-sm text-gray-500 ml-2">You reserved this</p>
+                                                                    <button
+                                                                        className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none"
+                                                                        onClick={() => handleCancelReserveItem(item.id)}
+                                                                    >
+                                                                        <BsCartX className="text-white-500" />
+                                                                    </button>
+                                                                </>
+                                                            ) : (
+                                                                <p className="text-sm text-gray-500 ml-2">Reserved by {item.Reservations[0].User.username}</p>
+                                                            )}
+                                                        </div>
+                                                    ) : null}
+                                                </div>
+                                            </li>
+                                        ))}
+                                </ul>
 
-                            {loggedInUser!= null && loggedInUser.id === user.id && (
-                                <button className="px-4 mt-3 py-2 bg-emerald-400 text-white rounded-md shadow-md hover:bg-emerald-600 min-w-full focus:outline-none" onClick={handleAddItem} > + </button>
-                            )}
-                        </div>
-                    ))}
+                                {loggedInUser!= null && loggedInUser.id === user.id && (
+                                    <button className="px-4 mt-3 py-2 bg-emerald-400 text-white rounded-md shadow-md hover:bg-emerald-600 min-w-full focus:outline-none" onClick={handleAddItem} > + </button>
+                                )}
+                            </div>
+                        ))}
+                    </Masonry>
                 </div>
             )}
         </div>
