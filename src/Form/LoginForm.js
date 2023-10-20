@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 const LoginForm = ({ onSignupLinkClick, onLoginSuccess, onForgetPasswordLinkClick }) => {
 
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
 
@@ -16,7 +16,7 @@ const LoginForm = ({ onSignupLinkClick, onLoginSuccess, onForgetPasswordLinkClic
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ email, password }),
             });
 
             if (response.ok) {
@@ -38,14 +38,14 @@ const LoginForm = ({ onSignupLinkClick, onLoginSuccess, onForgetPasswordLinkClic
             {/* Formulaire */}
             <form onSubmit={handleLogin}>
                 <div className="mb-4">
-                    <label htmlFor="username" className="block font-semibold mb-1">Username</label>
+                    <label htmlFor="email" className="block font-semibold mb-1">Email</label>
                     <input
                         type="text"
-                        id="username"
-                        name="username"
+                        id="email"
+                        name="email"
                         className="w-full p-2 border rounded-md"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
                 <div>
