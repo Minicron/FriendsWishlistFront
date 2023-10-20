@@ -210,11 +210,25 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                     .filter((item) => item.userId === user.id)
                                     .map((item) => (
                                         <li className="bg-white mt-3 border border-gray-300 p-4 rounded-md hover:bg-gray-100 hover:shadow-md flex justify-between items-center" key={item.id}>
-                                            <div>
-                                                <p className="font-bold">{item.itemName}</p>
-                                                <p className="TileSub">{item.description}</p>
+                                            <div className="flex flex-col justify-start">
+                                                <div>
+                                                    <p className="font-bold">{item.itemName}</p>
+                                                </div>
+                                                <div>
+                                                    <p className="TileSub">{item.description}</p>
+                                                </div>
                                                 {item.url && (
-                                                    <a href={item.url} title={item.url} className="TileSub mt-3 italic overflow-hidden truncate">{item.url}</a>
+                                                    <div className="truncate w-full max-w-xs">
+                                                        <a
+                                                            href={item.url}
+                                                            title={item.url}
+                                                            className="TileSub mt-3 italic truncate"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            {item.url}
+                                                        </a>
+                                                    </div>
                                                 )}
                                             </div>
                                             <div className="flex items-center">

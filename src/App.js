@@ -35,7 +35,6 @@ const App = () => {
     let failedQueue = [];
 
     useEffect(() => {
-
         const urlParams = new URLSearchParams(location.search);
 
         // Token d'activation dans l'URL ?
@@ -51,13 +50,25 @@ const App = () => {
             setShowResetPasswordForm(true);
         }
 
-        // Récupère le cookie "token" et vérifie s'il existe
-        const cookies = cookie.parse(document.cookie);
-        const token = cookies.token;
+        // Vérifiez le localStorage pour le token et initialisez l'état
+        const storedToken = localStorage.getItem('token');
+        const storedRefreshToken = localStorage.getItem('refreshToken');
+        const storedUsername = localStorage.getItem('username');
 
-        // Détermine si l'utilisateur est connecté en fonction de la présence du cookie "token"
-        setIsLoggedIn(!!token);
+        if (storedToken && storedRefreshToken && storedUsername) {
+            setIsLoggedIn(true);
+            setUsername(storedUsername);
+        } else {
+            // Si le token n'est pas trouvé dans le localStorage, vérifiez les cookies
+            const cookies = cookie.parse(document.cookie);
+            const cookieToken = cookies.token;
+
+            // Détermine si l'utilisateur est connecté en fonction de la présence du cookie "token"
+            setIsLoggedIn(!!cookieToken);
+        }
+
     }, [location]);
+
 
     const processQueue = (error, token = null) => {
         failedQueue.forEach(prom => {
@@ -143,7 +154,14 @@ const App = () => {
     };
 
     const handleLogout = () => {
+        // Supprimer le cookie 'token'
         document.cookie = cookie.serialize('token', '', { maxAge: -1 });
+
+        // Supprimer les éléments du localStorage
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('username');
+
         setIsLoggedIn(false);
     };
 
