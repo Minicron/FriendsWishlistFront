@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddItemForm = ({ wishlistId, onItemAdded }) => {
+const AddItemForm = ({ wishlistId, onItemAdded, onClose }) => {
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -78,6 +78,12 @@ const AddItemForm = ({ wishlistId, onItemAdded }) => {
                         className="px-4 py-2 mr-2 text-white bg-green-500 rounded-md shadow-md hover:bg-green-600 focus:outline-none"
                     >
                         Ajouter
+                    </button>
+                    <button
+                        onClick={onClose}
+                        className="px-4 py-2 mr-2 text-white bg-red-500 rounded-md shadow-md hover:bg-red-600 focus:outline-none"
+                    >
+                        Annuler
                     </button>
                 </div>
             </form>

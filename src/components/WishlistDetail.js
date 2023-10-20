@@ -193,7 +193,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                 </div>
             ) : showAddItemForm ? (
                 <div className="flex justify-center items-center mt-8">
-                    <AddItemForm wishlistId={wishlist.id} onItemAdded={handleHideAddItemForm} />
+                    <AddItemForm wishlistId={wishlist.id} onItemAdded={handleHideAddItemForm} onClose={handleHideAddItemForm} />
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 grid-flow-row">
