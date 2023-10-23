@@ -5,5 +5,10 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  extend: {
+    animation: {
+      shake: 'shake 0.5s ease-in-out',
+    },
+  },
 }
 

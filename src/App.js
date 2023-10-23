@@ -69,7 +69,6 @@ const App = () => {
 
     }, [location]);
 
-
     const processQueue = (error, token = null) => {
         failedQueue.forEach(prom => {
             if (error) {
@@ -185,7 +184,6 @@ const App = () => {
     const handleForgotPasswordLinkClick = () => {
         setShowLogin(false);
         setShowForgetPassword(true);
-
     };
 
     // Fonction pour gérer la connexion réussie
