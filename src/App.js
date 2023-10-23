@@ -220,31 +220,33 @@ const App = () => {
     // Si l'utilisateur n'est pas connecté, affiche simplement le formulaire de connexion
     if (!isLoggedIn) {
         return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-100">
-                {showLogin ? (
-                    <>
-                        {signupSuccessMessage ? (
-                            <ToastComponent message={signupSuccessMessage} />
-                        ) : null}
-                        {resetPasswordSuccessMessage ? (
-                            <ToastComponent message={resetPasswordSuccessMessage} />
-                        ) : null}
-                        <LoginForm
-                            onSignupLinkClick={() => setShowLogin(false)}
-                            onLoginSuccess={handleLoginSuccess}
-                            onForgetPasswordLinkClick={handleForgotPasswordLinkClick}
+            <div className="min-h-screen flex items-center justify-center bg-no-repeat bg-cover bg-center lg:bg-[url('/public/bg-login.jpg')]">
+                <div className="flex justify-center items-center min-h-screen">
+                    {showLogin ? (
+                        <>
+                            {signupSuccessMessage ? (
+                                <ToastComponent message={signupSuccessMessage} />
+                            ) : null}
+                            {resetPasswordSuccessMessage ? (
+                                <ToastComponent message={resetPasswordSuccessMessage} />
+                            ) : null}
+                            <LoginForm
+                                onSignupLinkClick={() => setShowLogin(false)}
+                                onLoginSuccess={handleLoginSuccess}
+                                onForgetPasswordLinkClick={handleForgotPasswordLinkClick}
+                            />
+                        </>
+                    ) : showForgetPassword ? (
+                        <ForgetPasswordForm
+                            onLoginLinkClick={handleLoginAccessFromForgetPassword}
                         />
-                    </>
-                ) : showForgetPassword ? (
-                    <ForgetPasswordForm
-                        onLoginLinkClick={handleLoginAccessFromForgetPassword}
-                    />
-                ) : (
-                    <SignupForm
-                        onLoginLinkClick={() => setShowLogin(true)}
-                        onSignupSuccess={handleSignupSuccess}
-                    />
-                )}
+                    ) : (
+                        <SignupForm
+                            onLoginLinkClick={() => setShowLogin(true)}
+                            onSignupSuccess={handleSignupSuccess}
+                        />
+                    )}
+                </div>
             </div>
         );
     }
