@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import InviteUserForm from '../Form/InviteUserForm';
 import AddItemForm from '../Form/AddItemForm';
-import { BsFillCartCheckFill, BsFillCartFill, BsCartX } from 'react-icons/bs';
+import { BsFillCartCheckFill, BsFillCartFill, BsCartX, BsPencil } from 'react-icons/bs';
 import Masonry from 'react-masonry-css';
+import EditItemForm from "../Form/EditItemForm";
 
 const WishlistDetail = ({ wishlist, onBackClick }) => {
 
@@ -11,6 +12,8 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const [affectedUsers, setAffectedUsers] = useState([]);
     const [showInviteUserForm, setShowInviteUserForm] = useState(false);
     const [showAddItemForm, setShowAddItemForm] = useState(false);
+    const [showEditItemForm, setShowEditItemForm] = useState(false);
+    const [editingItem, setEditingItem] = useState(null);
     const [showAddUserForm, setAddUserUserForm] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState(null);
     const breakpointColumnsObj = {
@@ -147,13 +150,20 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         setShowAddItemForm(true);
     };
 
+    const handleEditItemClick = (item) => {
+        setEditingItem(item);
+        setShowEditItemForm(true);
+    };
+
+    const handleHideEditItemForm = () => {
+        setShowEditItemForm(false);
+        setEditingItem(null);
+        fetchWishlistItems();
+    };
+
     const handleHideAddItemForm = () => {
         setShowAddItemForm(false);
         fetchWishlistItems();
-    }
-
-    const handleHideAddUserForm = () => {
-        setAddUserUserForm(false);
     }
 
     const handleHideInviteUserForm = () => {
@@ -202,6 +212,10 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
             ) : showAddItemForm ? (
                 <div className="flex justify-center items-center mt-8">
                     <AddItemForm wishlistId={wishlist.id} onItemAdded={handleHideAddItemForm} onClose={handleHideAddItemForm} />
+                </div>
+            ) : showEditItemForm ? (
+                <div className="flex justify-center items-center mt-8">
+                    <EditItemForm wishlistId={wishlist.id} item={editingItem} onItemUpdated={handleHideEditItemForm} onClose={handleHideEditItemForm} />
                 </div>
             ) : (
                 <div className="gap-4 p-4">
@@ -269,6 +283,11 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                             )}
                                                         </div>
                                                     ) : null}
+                                                    {loggedInUser.id === item.userId && (
+                                                        <button onClick={() => handleEditItemClick(item)} className="l-2 px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none">
+                                                            <BsPencil />
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </li>
                                         ))}
