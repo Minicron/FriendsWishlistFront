@@ -17,8 +17,8 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const [showAddUserForm, setAddUserUserForm] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState(null);
     const breakpointColumnsObj = {
-        default: 3,  // 3 colonnes par défaut
-        1100: 3,
+        default: 4,  // 3 colonnes par défaut
+        1100: 4,
         700: 2,
         500: 1
     };
@@ -235,61 +235,60 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                     {items
                                         .filter((item) => item.userId === user.id)
                                         .map((item) => (
-                                            <li className="bg-white mt-3 border border-gray-300 p-4 rounded-md hover:bg-gray-100 hover:shadow-md flex justify-between items-center" key={item.id}>
-                                                <div className="flex flex-col justify-start">
-                                                    <div>
+                                            <li className="bg-white mt-2 border border-gray-300 p-2 rounded-md hover:bg-gray-100 hover:shadow-md flex justify-between items-center text-sm" key={item.id}>
+                                                <div className="flex flex-row justify-between w-full">
+                                                    <div className="flex flex-col justify-start">
                                                         <p className="font-bold">{item.itemName}</p>
+                                                        <p className="TileSub text-ellipsis overflow-hidden whitespace-nowrap max-w-xs">{item.description}</p>
+                                                        {item.url && (
+                                                            <div className="truncate w-full max-w-xs">
+                                                                <a
+                                                                    href={item.url}
+                                                                    title={item.url}
+                                                                    className="TileSub mt-1 italic truncate"
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                >
+                                                                    {item.url}
+                                                                </a>
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    <div>
-                                                        <p className="TileSub">{item.description}</p>
-                                                    </div>
-                                                    {item.url && (
-                                                        <div className="truncate w-full max-w-xs">
-                                                            <a
-                                                                href={item.url}
-                                                                title={item.url}
-                                                                className="TileSub mt-3 italic truncate"
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
+                                                    <div className="flex items-center">
+                                                        {!item.reserved && loggedInUser != null && loggedInUser.id !== user.id && (
+                                                            <button
+                                                                className="px-2 py-1 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                                                                onClick={() => handleReserveItem(item.id)}
                                                             >
-                                                                {item.url}
-                                                            </a>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                                <div className="flex items-center">
-                                                    {!item.reserved && loggedInUser != null && loggedInUser.id !== user.id ? (
-                                                        <button
-                                                            className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
-                                                            onClick={() => handleReserveItem(item.id)}
-                                                        >
-                                                            <BsFillCartFill />
-                                                        </button>
-                                                    ) : item.reserved && loggedInUser != null && loggedInUser.id !== user.id ? (
-                                                        <div className="flex items-center">
-                                                            <BsFillCartCheckFill className="text-green-500" />
-                                                            {item.Reservations[0].User.id === loggedInUser.id ? (
-                                                                <>
-                                                                    <p className="text-sm text-gray-500 ml-2">You reserved this</p>
-                                                                    <button
-                                                                        className="ml-2 px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none"
-                                                                        onClick={() => handleCancelReserveItem(item.id)}
-                                                                    >
-                                                                        <BsCartX className="text-white-500" />
-                                                                    </button>
-                                                                </>
-                                                            ) : (
-                                                                <p className="text-sm text-gray-500 ml-2">Reserved by {item.Reservations[0].User.username}</p>
-                                                            )}
-                                                        </div>
-                                                    ) : null}
-                                                    {loggedInUser.id === item.userId && (
-                                                        <button onClick={() => handleEditItemClick(item)} className="l-2 px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none">
-                                                            <BsPencil />
-                                                        </button>
-                                                    )}
+                                                                <BsFillCartFill size="16" />
+                                                            </button>
+                                                        )}
+                                                        {item.reserved && loggedInUser != null && loggedInUser.id !== user.id && (
+                                                            <div className="flex items-center">
+                                                                <BsFillCartCheckFill className="text-green-500" size="16" />
+                                                                {item.Reservations[0].User.id === loggedInUser.id ? (
+                                                                    <>
+                                                                        <button
+                                                                            className="ml-2 px-2 py-1 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none"
+                                                                            onClick={() => handleCancelReserveItem(item.id)}
+                                                                        >
+                                                                            <BsCartX size="16" />
+                                                                        </button>
+                                                                    </>
+                                                                ) : (
+                                                                    <p className="text-xs text-gray-500 ml-2">{item.Reservations[0].User.username}</p>
+                                                                )}
+                                                            </div>
+                                                        )}
+                                                        {loggedInUser.id === item.userId && (
+                                                            <button onClick={() => handleEditItemClick(item)} className="ml-2 px-2 py-1 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none">
+                                                                <BsPencil size="16" />
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </li>
+
                                         ))}
                                 </ul>
 
