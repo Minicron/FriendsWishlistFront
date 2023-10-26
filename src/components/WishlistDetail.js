@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import InviteUserForm from '../Form/InviteUserForm';
 import AddItemForm from '../Form/AddItemForm';
-import { BsFillCartCheckFill, BsFillCartFill, BsCartX, BsPencil, BsTrashFill, BsBoxArrowUpRight  } from 'react-icons/bs';
+import { BsInfoCircle, BsLink, BsFillCartFill, BsCartX, BsPencil, BsTrashFill, BsBoxArrowUpRight  } from 'react-icons/bs';
 import Masonry from 'react-masonry-css';
 import EditItemForm from "../Form/EditItemForm";
 import { Tooltip, TooltipProvider } from 'react-tooltip';
-
 
 
 const WishlistDetail = ({ wishlist, onBackClick }) => {
@@ -17,15 +16,18 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const [showAddItemForm, setShowAddItemForm] = useState(false);
     const [showEditItemForm, setShowEditItemForm] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
-    const [showAddUserForm, setAddUserUserForm] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState(null);
+    const [hoveredItemId, setHoveredItemId] = useState(null);
+    const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+
+
+
     const breakpointColumnsObj = {
-        default: 4,  // 3 colonnes par défaut
-        1100: 4,
+        default: 3,  // 3 colonnes par défaut
+        1100: 3,
         700: 2,
         500: 1
     };
-
 
     useEffect(() => {
         fetchAffectedUsers();
@@ -149,6 +151,20 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         }
     };
 
+    const handleMouseOver = (itemId, e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setTooltipPosition({
+            top: rect.top - 38, // décaler légèrement vers le haut
+            left: rect.right - 30 // décaler légèrement vers la droite
+        });
+        setHoveredItemId(itemId);
+    };
+
+    const handleMouseOut = () => {
+        setHoveredItemId(null);
+    };
+
+
     const handleAddItem = async () => {
         setShowAddItemForm(true);
     };
@@ -251,33 +267,53 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                         columnClassName="masonry-grid_column"
                     >
                         <TooltipProvider>
-                        {affectedUsers.map((user) => (
-                            <div key={user.id} className="bg-white border border-gray-300 p-4 rounded-md shadow-md min-h-fit tuile" >
-                                {loggedInUser!= null && loggedInUser.id === user.id ? (
-                                    <h3 className="text-lg font-semibold">{user.username} (you) </h3>
-                                ) : (
-                                    <h3 className="text-lg font-semibold">{user.username}</h3>
-                                )}
-                                <ul>
-                                    {items
-                                        .filter((item) => item.userId === user.id)
-                                        .map((item) => (
-                                            <li className="bg-white mt-2 border border-gray-300 p-2 rounded-md hover:bg-gray-100 hover:shadow-md flex justify-between items-center text-sm" key={item.id}>
-                                                <div className="flex flex-row justify-between w-full">
-                                                    <div className="flex flex-col justify-start">
-                                                        <p className="font-bold">{item.itemName}</p>
-
-                                                        <p
-                                                            className="TileSub text-ellipsis overflow-hidden whitespace-nowrap max-w-xs"
-                                                            data-tooltip-id={`itemDescription-${item.id}`}
-                                                        >
-                                                            {item.description}
-                                                        </p>
-                                                        <Tooltip id={`itemDescription-${item.id}`} place="top" effect="solid">
-                                                            {item.description}
-                                                        </Tooltip>
+                            {affectedUsers.map((user) => (
+                                <div key={user.id} className="bg-white border border-gray-300 p-2 rounded-md shadow-md min-h-fit tuile">
+                                    {loggedInUser != null && loggedInUser.id === user.id ? (
+                                        <h3 className="text-lg font-semibold">{user.username} (you) </h3>
+                                    ) : (
+                                        <h3 className="text-lg font-semibold">{user.username}</h3>
+                                    )}
+                                    <ul>
+                                        {items
+                                            .filter((item) => item.userId === user.id)
+                                            .map((item) => (
+                                                <li className="bg-white mt-1 border border-gray-300 p-2 rounded-md hover:bg-gray-100 hover:shadow-md flex flex-col md:flex-row items-center justify-between text-sm max-h-[300px] overflow-hidden">
+                                                    <div className="flex flex-col pr-4 flex-grow mb-2 md:mb-0 md:flex-grow">
+                                                        <div className="flex flex-row items-center justify-between">
+                                                            <p className="break-word">{item.itemName}
+                                                                {item.reserved && loggedInUser != null && loggedInUser.id !== user.id && (
+                                                                    <span className="text-xs text-green-600"> - Reserved by {item.Reservations[0].User.username}</span>
+                                                                )}
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex items-center">
+                                                    <div className="flex items-center space-x-2">
+                                                        {item.description && (
+                                                            <button
+                                                                className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                                                                onMouseOver={(e) => handleMouseOver(item.id, e)}
+                                                                onMouseOut={handleMouseOut}
+                                                            >
+                                                                <BsInfoCircle size="16" />
+                                                            </button>
+                                                        )}
+                                                        {hoveredItemId === item.id && (
+                                                            <div style={{
+                                                                position: 'absolute',
+                                                                top: `${tooltipPosition.top}px`,
+                                                                left: `${tooltipPosition.left}px`,
+                                                                backgroundColor: 'white',
+                                                                border: '1px solid gray',
+                                                                padding: '5px',
+                                                                borderRadius: '5px',
+                                                                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                                                                zIndex: 10,
+                                                                animation: 'fadeIn 0.5s forwards'
+                                                            }}>
+                                                                {item.description}
+                                                            </div>
+                                                        )}
                                                         {item.url && (
                                                             <a
                                                                 href={item.url}
@@ -285,7 +321,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                                 rel="noopener noreferrer"
                                                                 className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
                                                             >
-                                                                <BsBoxArrowUpRight size="16" />
+                                                                <BsLink size="16" />
                                                             </a>
                                                         )}
                                                         {!item.reserved && loggedInUser != null && loggedInUser.id !== user.id && (
@@ -297,21 +333,18 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                             </button>
                                                         )}
                                                         {item.reserved && loggedInUser != null && loggedInUser.id !== user.id && (
-                                                            <div className="flex items-center">
-                                                                <BsFillCartCheckFill className="text-green-500" size="16" />
+                                                            <>
                                                                 {item.Reservations[0].User.id === loggedInUser.id ? (
-                                                                    <>
-                                                                        <button
-                                                                            className="ml-2 px-2 py-1 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none"
-                                                                            onClick={() => handleCancelReserveItem(item.id)}
-                                                                        >
-                                                                            <BsCartX size="16" />
-                                                                        </button>
-                                                                    </>
+                                                                    <button
+                                                                        className="ml-2 px-2 py-1 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none"
+                                                                        onClick={() => handleCancelReserveItem(item.id)}
+                                                                    >
+                                                                        <BsCartX size="16" />
+                                                                    </button>
                                                                 ) : (
                                                                     <p className="text-xs text-gray-500 ml-2">{item.Reservations[0].User.username}</p>
-                                                                )}
-                                                            </div>
+                                                            )}
+                                                            </>
                                                         )}
                                                         {loggedInUser.id === item.userId && (
                                                             <>
@@ -324,17 +357,14 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                             </>
                                                         )}
                                                     </div>
-                                                </div>
-                                            </li>
-
-                                        ))}
-                                </ul>
-
-                                {loggedInUser!= null && loggedInUser.id === user.id && (
-                                    <button className="px-4 mt-3 py-2 bg-emerald-400 text-white rounded-md shadow-md hover:bg-emerald-600 min-w-full focus:outline-none" onClick={handleAddItem} > + </button>
-                                )}
-                            </div>
-                        ))}
+                                                </li>
+                                            ))}
+                                    </ul>
+                                    {loggedInUser != null && loggedInUser.id === user.id && (
+                                        <button className="px-2 mt-1 py-2 bg-emerald-400 text-white rounded-md shadow-md hover:bg-emerald-600 min-w-full focus:outline-none" onClick={handleAddItem}> + </button>
+                                    )}
+                                </div>
+                            ))}
                         </TooltipProvider>
                     </Masonry>
                 </div>

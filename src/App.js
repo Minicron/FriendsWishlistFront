@@ -254,7 +254,7 @@ const App = () => {
     // Si l'utilisateur est connecté, affiche ses listes de souhaits
     return (
         <div>
-            <Header title="Friends Wishlist" user={username} onLogout={handleLogout} />
+            <Header title="Friends Wishlist (beta)" user={username} onLogout={handleLogout} />
             {/* Affiche la grille de wishlists */}
             {showCreateForm ? (
                 <WishlistForm onHideWishlistForm={handleHideWishlistForm} />

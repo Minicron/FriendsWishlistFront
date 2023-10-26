@@ -48,3 +48,89 @@
 .shake {
   animation: shake 0.5s ease-in-out;
 }
+
+/* WishlistDetail.css */
+.text-ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+.item-description {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* WishlistDetail.css */
+.button, .button-small {
+  padding: 0.5rem 0.7rem;
+  min-width: 16px;
+}
+
+.icon {
+  width: 12px;
+  height: 12px;
+}
+
+@media (max-width: 1024px) {
+  .button, .button-small {
+    min-width: 90px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .button, .button-small {
+    min-width: 80px;
+    font-size: 0.8rem;
+  }
+
+  .icon {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .button, .button-small {
+    min-width: 70px;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .icon {
+    width: 12px;
+    height: 12px;
+  }
+}
+.description {
+  max-width: 70%; /* Ajustez cette valeur selon vos besoins */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+
