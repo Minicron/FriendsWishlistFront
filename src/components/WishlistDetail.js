@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import InviteUserForm from '../Form/InviteUserForm';
 import AddItemForm from '../Form/AddItemForm';
-import { BsFillCartCheckFill, BsFillCartFill, BsCartX, BsPencil } from 'react-icons/bs';
+import { BsFillCartCheckFill, BsFillCartFill, BsCartX, BsPencil, BsTrashFill } from 'react-icons/bs';
 import Masonry from 'react-masonry-css';
 import EditItemForm from "../Form/EditItemForm";
 
@@ -155,6 +155,29 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         setShowEditItemForm(true);
     };
 
+    const handleDeleteItemClick = async (item) => {
+
+        const confirmed = window.confirm("Beware, if you delete this item, it will be gone forever. Are you sure you want to delete it?");
+
+        if (confirmed) {
+            try {
+                const response = await axios.delete(
+                    process.env.REACT_APP_BACKEND_URL + `/item/${item.id}`,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            "x-access-token": localStorage.getItem('token'),
+                        },
+                    });
+
+                // Mise à jour de l'état de la wishlist pour indiquer qu'elle est clôturée
+                fetchWishlistItems();
+            } catch (error) {
+                console.error('Erreur lors de la suppression de l\'item :', error);
+            }
+        }
+    };
+
     const handleHideEditItemForm = () => {
         setShowEditItemForm(false);
         setEditingItem(null);
@@ -281,9 +304,14 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                             </div>
                                                         )}
                                                         {loggedInUser.id === item.userId && (
-                                                            <button onClick={() => handleEditItemClick(item)} className="ml-2 px-2 py-1 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none">
-                                                                <BsPencil size="16" />
-                                                            </button>
+                                                            <>
+                                                                <button onClick={() => handleEditItemClick(item)} className="ml-2 px-2 py-1 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none">
+                                                                    <BsPencil size="16" />
+                                                                </button>
+                                                                <button onClick={() => handleDeleteItemClick(item)} className="ml-2 px-2 py-1 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none">
+                                                                    <BsTrashFill size="16" />
+                                                                </button>
+                                                            </>
                                                         )}
                                                     </div>
                                                 </div>

@@ -4,12 +4,12 @@ import axios from 'axios';
 const InviteUserForm = ({ wishlistId, onClose }) => {
 
     const [invitationMail, setInvitationMail] = useState('');
+    const [existingUserMail, setExistingUserMail] = useState('');
     const [error, setError] = useState('');
+    const [error2, setError2] = useState('');
 
-    const handleSubmit = async (e) => {
-
+    const handleInviteSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const response = await axios.post(
                 process.env.REACT_APP_BACKEND_URL + `/wishlist/invite/${wishlistId}`,
@@ -22,10 +22,8 @@ const InviteUserForm = ({ wishlistId, onClose }) => {
                 }
             );
             if (response.status === 200) {
-                // Everything went well
                 onClose();
             } else if (response.status === 404) {
-                // userInvitation already exists
                 setError(response.data.message);
             }
         } catch (error) {
@@ -33,11 +31,35 @@ const InviteUserForm = ({ wishlistId, onClose }) => {
         }
     };
 
+    const handleAddExistingUser = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post(
+                process.env.REACT_APP_BACKEND_URL + `/wishlist/${wishlistId}/addUser`,
+                { email: existingUserMail },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "x-access-token" : localStorage.getItem('token'),
+                    },
+                }
+            );
+            if (response.status === 200) {
+                onClose();
+            } else if (response.status === 404) {
+                setError2("User not found");
+            }
+        } catch (error) {
+            setError2(error.response.data.message);
+        }
+    };
+
     return (
-        <div className="w-9/12 p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">Send an invitation</h2>
+        <div className="w-4/12 p-6 bg-white rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Send an invitation to a new user</h2>
             {error && <p className="text-red-500 mb-2">{error}</p>}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Formulaire pour inviter un nouvel utilisateur */}
+            <form onSubmit={handleInviteSubmit} className="space-y-4">
                 <div>
                     <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                         User email
@@ -53,6 +75,34 @@ const InviteUserForm = ({ wishlistId, onClose }) => {
                 </div>
                 <div className="flex justify-end">
                     <button
+                        type="submit"
+                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                    >
+                        Send Invitation
+                    </button>
+                </div>
+            </form>
+
+            <hr className="my-4" />
+            <h2 className="text-xl font-semibold mb-4">Search for an existing user by email</h2>
+            {error2 && <p className="text-red-500 mb-2">{error2}</p>}
+            {/* Formulaire pour ajouter un utilisateur existant */}
+            <form onSubmit={handleAddExistingUser} className="space-y-4">
+                <div>
+                    <label htmlFor="existingUser" className="block text-sm font-medium text-gray-700">
+                        User email
+                    </label>
+                    <input
+                        type="text"
+                        id="existingUser"
+                        value={existingUserMail}
+                        onChange={(e) => setExistingUserMail(e.target.value)}
+                        className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        required
+                    />
+                </div>
+                <div className="flex justify-end">
+                    <button
                         type="button"
                         className="px-4 py-2 mr-2 text-gray-600 border rounded-md shadow-md hover:bg-gray-100 focus:outline-none"
                         onClick={onClose}
@@ -61,9 +111,9 @@ const InviteUserForm = ({ wishlistId, onClose }) => {
                     </button>
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                        className="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 focus:outline-none"
                     >
-                        Send
+                        Add User
                     </button>
                 </div>
             </form>
