@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import InviteUserForm from '../Form/InviteUserForm';
 import AddItemForm from '../Form/AddItemForm';
-import { BsFillCartCheckFill, BsFillCartFill, BsCartX, BsPencil, BsTrashFill } from 'react-icons/bs';
+import { BsFillCartCheckFill, BsFillCartFill, BsCartX, BsPencil, BsTrashFill, BsBoxArrowUpRight  } from 'react-icons/bs';
 import Masonry from 'react-masonry-css';
 import EditItemForm from "../Form/EditItemForm";
+import { Tooltip, TooltipProvider } from 'react-tooltip';
+
+
 
 const WishlistDetail = ({ wishlist, onBackClick }) => {
 
@@ -247,6 +250,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                         className="masonry-grid"
                         columnClassName="masonry-grid_column"
                     >
+                        <TooltipProvider>
                         {affectedUsers.map((user) => (
                             <div key={user.id} className="bg-white border border-gray-300 p-4 rounded-md shadow-md min-h-fit tuile" >
                                 {loggedInUser!= null && loggedInUser.id === user.id ? (
@@ -262,25 +266,31 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                 <div className="flex flex-row justify-between w-full">
                                                     <div className="flex flex-col justify-start">
                                                         <p className="font-bold">{item.itemName}</p>
-                                                        <p className="TileSub text-ellipsis overflow-hidden whitespace-nowrap max-w-xs">{item.description}</p>
-                                                        {item.url && (
-                                                            <div className="truncate w-full max-w-xs">
-                                                                <a
-                                                                    href={item.url}
-                                                                    title={item.url}
-                                                                    className="TileSub mt-1 italic truncate"
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                >
-                                                                    {item.url}
-                                                                </a>
-                                                            </div>
-                                                        )}
+
+                                                        <p
+                                                            className="TileSub text-ellipsis overflow-hidden whitespace-nowrap max-w-xs"
+                                                            data-tooltip-id={`itemDescription-${item.id}`}
+                                                        >
+                                                            {item.description}
+                                                        </p>
+                                                        <Tooltip id={`itemDescription-${item.id}`} place="top" effect="solid">
+                                                            {item.description}
+                                                        </Tooltip>
                                                     </div>
                                                     <div className="flex items-center">
+                                                        {item.url && (
+                                                            <a
+                                                                href={item.url}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                                                            >
+                                                                <BsBoxArrowUpRight size="16" />
+                                                            </a>
+                                                        )}
                                                         {!item.reserved && loggedInUser != null && loggedInUser.id !== user.id && (
                                                             <button
-                                                                className="px-2 py-1 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                                                                className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
                                                                 onClick={() => handleReserveItem(item.id)}
                                                             >
                                                                 <BsFillCartFill size="16" />
@@ -325,6 +335,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                 )}
                             </div>
                         ))}
+                        </TooltipProvider>
                     </Masonry>
                 </div>
             )}
