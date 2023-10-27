@@ -159,11 +159,11 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         // Vérifiez si nous sommes à moins de 100 pixels du bord droit de l'écran
         if (window.innerWidth - rect.right < 100) {
             // Dans ce cas, ajustez pour afficher l'infobulle vers la gauche
-            leftPosition = rect.left + scrollLeft - 100; // ajustez selon vos besoins
+            leftPosition = rect.left + scrollLeft - 300; // ajustez selon vos besoins
         }
 
         setTooltipPosition({
-            top: rect.top + scrollTop - 38, // décaler légèrement vers le haut
+            top: rect.top + scrollTop - 50, // décaler légèrement vers le haut
             left: leftPosition
         });
         setHoveredItemId(itemId);
