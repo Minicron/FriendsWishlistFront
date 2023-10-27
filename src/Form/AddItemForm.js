@@ -33,8 +33,8 @@ const AddItemForm = ({ wishlistId, onItemAdded, onClose }) => {
     };
 
     return (
-        <div className="w-9/12 p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-4">Add a new item to your list !</h2>
+        <div className="md:w-9/12 w-11/12 p-6 bg-white rounded-lg shadow-md">
+            <h2 className="text-xl font-semibold mb-4">Add a new item to your list</h2>
             {error && <p className="text-red-500 mb-2">{error}</p>}
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>

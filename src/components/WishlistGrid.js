@@ -52,16 +52,16 @@ const WishlistGrid = ({ onWishlistClick, onDisplayWishlistForm }) => {
                 {/* Dans cette row, aligné à gauche, un sous-titre */}
                 <h2 className="text-lg font-semibold">My Wishlists</h2>
                 {/* Dans cette row, aligné à droite, un bouton pour créer une nouvelle wishlist */}
-                <button className="px-4 py-2 text-sm text-white bg-blue-500 rounded-md shadow-md hover:bg-blue-600" onClick={onDisplayWishlistForm}>
-                    Create New Wishlist
+                <button className="px-4 py-2 text-sm text-white bg-gray-800 rounded-md shadow-md hover:bg-gray-600" onClick={onDisplayWishlistForm}>
+                    New Wishlist
                 </button>
             </div>
             {hasWishlist ? (
-                <div className="grid p-8 grid-cols-3 gap-4">
+                <div className="grid p-8 md:grid-cols-3 gap-4 grid-cols-1">
                     {wishlists.map((wishlist) => (
                         <div
                             key={wishlist.id}
-                            className="bg-white p-4 shadow-md rounded-md cursor-pointer h-40 hover:shadow-md hover:bg-gray-100"
+                            className="bg-white p-4 shadow-md rounded-md cursor-pointer min-h-30 hover:shadow-md hover:bg-gray-100"
                             onClick={() => onWishlistClick(wishlist.id)}
                         >
                             <h3 className="text-lg font-semibold">{wishlist.name}</h3>

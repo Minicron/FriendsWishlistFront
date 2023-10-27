@@ -55,7 +55,7 @@ const InviteUserForm = ({ wishlistId, onClose }) => {
     };
 
     return (
-        <div className="w-4/12 p-6 bg-white rounded-lg shadow-md">
+        <div className="md:w-4/12 p-6 bg-white rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Send an invitation to a new user</h2>
             {error && <p className="text-red-500 mb-2">{error}</p>}
             {/* Formulaire pour inviter un nouvel utilisateur */}
@@ -75,14 +75,20 @@ const InviteUserForm = ({ wishlistId, onClose }) => {
                 </div>
                 <div className="flex justify-end">
                     <button
+                        type="button"
+                        className="px-4 py-2 mr-2 text-white border rounded-md shadow-md hover:bg-red-600 bg-red-500  focus:outline-none"
+                        onClick={onClose}
+                    >
+                        Cancel
+                    </button>
+                    <button
                         type="submit"
-                        className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                        className="w-2/4 md:w-auto px-4 py-2 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                     >
                         Send Invitation
                     </button>
                 </div>
             </form>
-
             <hr className="my-4" />
             <h2 className="text-xl font-semibold mb-4">Search for an existing user by email</h2>
             {error2 && <p className="text-red-500 mb-2">{error2}</p>}
@@ -104,14 +110,14 @@ const InviteUserForm = ({ wishlistId, onClose }) => {
                 <div className="flex justify-end">
                     <button
                         type="button"
-                        className="px-4 py-2 mr-2 text-gray-600 border rounded-md shadow-md hover:bg-gray-100 focus:outline-none"
+                        className="px-4 py-2 mr-2 text-white border rounded-md shadow-md hover:bg-red-600 bg-red-500  focus:outline-none"
                         onClick={onClose}
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-green-500 text-white rounded-md shadow-md hover:bg-green-600 focus:outline-none"
+                        className="w-2/4 md:w-auto px-4 py-2 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                     >
                         Add User
                     </button>

@@ -60,11 +60,11 @@ const WishlistForm = ({ onHideWishlistForm }) => {
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <div  className="w-9/12 p-6 bg-white rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">Créer une nouvelle wishlist</h2>
+                <h2 className="text-xl font-semibold mb-4">Create a new Wishlist</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                            Titre
+                            Title
                         </label>
                         <input
                             type="text"
@@ -88,16 +88,16 @@ const WishlistForm = ({ onHideWishlistForm }) => {
                         />
                     </div>
                     <button
-                        className="px-4 w-2/12 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                        className="px-4 md:w-2/12 py-2 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                         onClick={cancel}
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="px-4 w-2/12 float-right py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                        className="px-4 md:w-2/12 float-right py-2 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                     >
-                        Créer
+                        Create
                     </button>
                 </form>
             </div>

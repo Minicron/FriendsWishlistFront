@@ -225,29 +225,29 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
 
     return (
         <div>
-            <div className="flex justify-between mb-4 p-8">
-                <div>
+            <div className="md:flex md:justify-between mb-4 p-4 flex-col">
+                <div className="mb-4 md:mb-0 text-center md:text-left">
                     <h2 className="text-xl font-semibold">{wishlist.name}</h2>
                     <p>{wishlist.description}</p>
                 </div>
                 {wishlist.User.username && (
-                    <div className="space-x-2">
+                    <div className="space-y-2 md:space-x-2 md:space-y-0">
                         <button
-                            className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                            className="w-full md:w-auto text-center px-4 py-2 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                             onClick={onBackClick}
                         >
                             Back to my wishlists
                         </button>
-                        {loggedInUser!= null && wishlist.User.id === loggedInUser.id && !wishlist.isClosed && (
+                        {loggedInUser != null && wishlist.User.id === loggedInUser.id && !wishlist.isClosed && (
                             <>
                                 <button
-                                    className="px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                                    className="w-full md:w-auto text-center mt-2 md:mt-0 px-4 py-2 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                                     onClick={handleInviteUser}
                                 >
                                     Send an invitation
                                 </button>
                                 <button
-                                    className="px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none"
+                                    className="w-full md:w-auto text-center mt-2 md:mt-0 px-4 py-2 bg-red-500 text-white rounded-md shadow-md hover:bg-red-600 focus:outline-none"
                                     onClick={handleCloseWishlist}
                                 >
                                     Close this wishlist
@@ -270,7 +270,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                     <EditItemForm wishlistId={wishlist.id} item={editingItem} onItemUpdated={handleHideEditItemForm} onClose={handleHideEditItemForm} />
                 </div>
             ) : (
-                <div className="gap-4 p-4">
+                <div className="gap-4 p-0">
                     <Masonry
                         breakpointCols={breakpointColumnsObj}
                         className="masonry-grid"
@@ -300,7 +300,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                 <div className="flex items-center space-x-2">
                                                     {item.description && (
                                                         <button
-                                                            className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                                                            className="ml-2 px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                                                             onMouseOver={(e) => handleMouseOver(item.id, e)}
                                                             onMouseOut={handleMouseOut}
                                                         >
@@ -330,14 +330,14 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                             href={item.url}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                                                            className="ml-2 px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                                                         >
                                                             <BsLink size="16" />
                                                         </a>
                                                     )}
                                                     {!item.reserved && loggedInUser != null && loggedInUser.id !== user.id && (
                                                         <button
-                                                            className="ml-2 px-2 py-1 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 focus:outline-none"
+                                                            className="ml-2 px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                                                             onClick={() => handleReserveItem(item.id)}
                                                         >
                                                             <BsFillCartFill size="16" />
