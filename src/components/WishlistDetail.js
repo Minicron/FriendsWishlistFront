@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import InviteUserForm from '../Form/InviteUserForm';
 import AddItemForm from '../Form/AddItemForm';
@@ -17,6 +17,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const [loggedInUser, setLoggedInUser] = useState(null);
     const [hoveredItemId, setHoveredItemId] = useState(null);
     const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
+    const tooltipRef = useRef(null); // Référence à l'infobulle
 
     const breakpointColumnsObj = {
         default: 4,  // 3 colonnes par défaut
@@ -152,13 +153,21 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
+        const tooltipWidth = tooltipRef.current ? tooltipRef.current.offsetWidth : 0; // Obtenez la largeur de l'infobulle
+
+        let leftPosition = rect.right + scrollLeft - 30;
+
+        // Vérifiez si l'infobulle déborde sur la droite
+        if (leftPosition + tooltipWidth > window.innerWidth) {
+            leftPosition = rect.left + scrollLeft - tooltipWidth; // Ajustez en fonction de la largeur de l'infobulle
+        }
+
         setTooltipPosition({
             top: rect.top + scrollTop - 38, // décaler légèrement vers le haut
-            left: rect.right + scrollLeft - 30 // décaler légèrement vers la droite
+            left: leftPosition
         });
         setHoveredItemId(itemId);
     };
-
 
     const handleMouseOut = () => {
         setHoveredItemId(null);
@@ -298,7 +307,9 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                         </button>
                                                     )}
                                                     {hoveredItemId === item.id && (
-                                                        <div style={{
+                                                        <div
+                                                            ref={tooltipRef}
+                                                            style={{
                                                             position: 'absolute',
                                                             top: `${tooltipPosition.top}px`,
                                                             left: `${tooltipPosition.left}px`,
