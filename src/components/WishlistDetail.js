@@ -153,13 +153,13 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
-        const tooltipWidth = tooltipRef.current ? tooltipRef.current.offsetWidth : 0; // Obtenez la largeur de l'infobulle
+        // Définir le positionnement par défaut à droite
+        let leftPosition = rect.right + scrollLeft - 30; // décaler légèrement vers la droite
 
-        let leftPosition = rect.right + scrollLeft - 30;
-
-        // Vérifiez si l'infobulle déborde sur la droite
-        if (leftPosition + tooltipWidth > window.innerWidth) {
-            leftPosition = rect.left + scrollLeft - tooltipWidth; // Ajustez en fonction de la largeur de l'infobulle
+        // Vérifiez si nous sommes à moins de 100 pixels du bord droit de l'écran
+        if (window.innerWidth - rect.right < 100) {
+            // Dans ce cas, ajustez pour afficher l'infobulle vers la gauche
+            leftPosition = rect.left + scrollLeft - 100; // ajustez selon vos besoins
         }
 
         setTooltipPosition({
@@ -168,6 +168,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         });
         setHoveredItemId(itemId);
     };
+
 
     const handleMouseOut = () => {
         setHoveredItemId(null);
