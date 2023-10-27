@@ -2,7 +2,8 @@ import React, { useRef, useState, useEffect } from 'react';
 import axios from 'axios';
 import InviteUserForm from '../Form/InviteUserForm';
 import AddItemForm from '../Form/AddItemForm';
-import { BsInfoCircle, BsLink, BsFillCartFill, BsCartX, BsPencil, BsTrashFill, BsBoxArrowUpRight  } from 'react-icons/bs';
+import CommentModal from './CommentModal';
+import { BsInfoCircle, BsLink, BsFillCartFill, BsCartX, BsPencil, BsTrashFill, BsMessenger } from 'react-icons/bs';
 import Masonry from 'react-masonry-css';
 import EditItemForm from "../Form/EditItemForm";
 
@@ -18,6 +19,8 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const [hoveredItemId, setHoveredItemId] = useState(null);
     const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
     const tooltipRef = useRef(null); // Référence à l'infobulle
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [selectedItemId, setSelectedItemId] = useState(null);
 
     const breakpointColumnsObj = {
         default: 4,  // 3 colonnes par défaut
@@ -32,6 +35,20 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         fetchLoggedInUser();
 
     }, [wishlist.id]);
+
+    function handleCommentButtonClick(itemId) {
+        setSelectedItemId(itemId);
+        openModal();
+    }
+
+
+    const openModal = () => {
+        setModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+    };
 
     const handleInviteUser = () => {
         setShowInviteUserForm(true);
@@ -335,6 +352,14 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                             <BsLink size="16" />
                                                         </a>
                                                     )}
+                                                    {loggedInUser.id !== user.id && (
+                                                        <button
+                                                            className="ml-2 px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
+                                                            onClick={() => handleCommentButtonClick(item.id)}
+                                                        >
+                                                            <BsMessenger size="16" />
+                                                        </button>
+                                                    )}
                                                     {!item.reserved && loggedInUser != null && loggedInUser.id !== user.id && (
                                                         <button
                                                             className="ml-2 px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
@@ -377,6 +402,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                     </Masonry>
                 </div>
             )}
+            {isModalOpen && <CommentModal closeModal={closeModal} itemId={selectedItemId} />}
         </div>
     );
 };
