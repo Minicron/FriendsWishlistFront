@@ -41,13 +41,13 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         openModal();
     }
 
-
     const openModal = () => {
         setModalOpen(true);
     };
 
     const closeModal = () => {
         setModalOpen(false);
+        fetchWishlistItems();
     };
 
     const handleInviteUser = () => {
@@ -353,13 +353,28 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                         </a>
                                                     )}
                                                     {loggedInUser.id !== user.id && (
-                                                        <button
-                                                            className="ml-2 px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
-                                                            onClick={() => handleCommentButtonClick(item.id)}
-                                                        >
-                                                            <BsMessenger size="16" />
-                                                        </button>
+                                                        <div className="relative inline-block"> {/* Englobe le bouton dans un conteneur relatif */}
+                                                            <button
+                                                                className="px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
+                                                                onClick={() => handleCommentButtonClick(item.id)}
+                                                            >
+                                                                <BsMessenger size="16" />
+                                                            </button>
+                                                            {item.nbComment > 0 && (
+                                                                <span className="absolute bottom-0 right-0 translate-x-1/3 translate-y-1/3"> {/* Positionne en bas à droite */}
+                                                                    <span className="flex h-4 w-4"> {/* Taille du cercle */}
+                                                                        <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                                                        <span className="relative inline-flex rounded-full h-4 w-4 bg-red-500 justify-center items-center"> {/* Cercle rouge avec centrage */}
+                                                                            <span className="text-xs text-white font-medium"> {/* Texte centré */}
+                                                                                {item.nbComment}
+                                                                            </span>
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                     )}
+
                                                     {!item.reserved && loggedInUser != null && loggedInUser.id !== user.id && (
                                                         <button
                                                             className="ml-2 px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
