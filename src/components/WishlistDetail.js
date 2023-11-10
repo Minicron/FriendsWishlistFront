@@ -3,6 +3,7 @@ import axios from 'axios';
 import InviteUserForm from '../Form/InviteUserForm';
 import AddItemForm from '../Form/AddItemForm';
 import CommentModal from './CommentModal';
+import DescriptionModal from './DescriptionModal';
 import { BsInfoCircle, BsLink, BsFillCartFill, BsCartX, BsPencil, BsTrashFill, BsMessenger } from 'react-icons/bs';
 import Masonry from 'react-masonry-css';
 import EditItemForm from "../Form/EditItemForm";
@@ -20,7 +21,9 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
     const tooltipRef = useRef(null); // Référence à l'infobulle
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isModalDescriptionOpen, setModalDescriptionOpen] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
+    const [selectedDescription, setSelectedDescription] = useState(null);
 
     const breakpointColumnsObj = {
         default: 4,  // 3 colonnes par défaut
@@ -41,12 +44,26 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         openModal();
     }
 
+    function handleDescriptionButtonClick(description) {
+        setSelectedDescription(description);
+        openModalDescription();
+    }
+
     const openModal = () => {
         setModalOpen(true);
     };
 
     const closeModal = () => {
         setModalOpen(false);
+        fetchWishlistItems();
+    };
+
+    const openModalDescription = () => {
+        setModalDescriptionOpen(true);
+    };
+
+    const closeDescriptionModal = () => {
+        setModalDescriptionOpen(false);
         fetchWishlistItems();
     };
 
@@ -319,6 +336,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                         <button
                                                             className="ml-2 px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                                                             onMouseOver={(e) => handleMouseOver(item.id, e)}
+                                                            onClick={() => handleDescriptionButtonClick(item.description)}
                                                             onMouseOut={handleMouseOut}
                                                         >
                                                             <BsInfoCircle size="16" />
@@ -418,6 +436,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                 </div>
             )}
             {isModalOpen && <CommentModal closeModal={closeModal} itemId={selectedItemId} />}
+            {isModalDescriptionOpen && <DescriptionModal closeDescriptionModal={closeDescriptionModal} description={selectedDescription} />}
         </div>
     );
 };
