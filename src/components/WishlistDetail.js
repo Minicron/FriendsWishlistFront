@@ -24,6 +24,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
     const [isModalDescriptionOpen, setModalDescriptionOpen] = useState(false);
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [selectedDescription, setSelectedDescription] = useState(null);
+    const [selectedItemName, setSelectedItemName] = useState(null);
 
     const breakpointColumnsObj = {
         default: 4,  // 3 colonnes par défaut
@@ -44,8 +45,9 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
         openModal();
     }
 
-    function handleDescriptionButtonClick(description) {
+    function handleDescriptionButtonClick(description, itemName) {
         setSelectedDescription(description);
+        setSelectedItemName(itemName)
         openModalDescription();
     }
 
@@ -336,7 +338,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                                                         <button
                                                             className="ml-2 px-2 py-1 bg-gray-800 text-white rounded-md shadow-md hover:bg-gray-600 focus:outline-none"
                                                             onMouseOver={(e) => handleMouseOver(item.id, e)}
-                                                            onClick={() => handleDescriptionButtonClick(item.description)}
+                                                            onClick={() => handleDescriptionButtonClick(item.description, item.itemName)}
                                                             onMouseOut={handleMouseOut}
                                                         >
                                                             <BsInfoCircle size="16" />
@@ -436,7 +438,7 @@ const WishlistDetail = ({ wishlist, onBackClick }) => {
                 </div>
             )}
             {isModalOpen && <CommentModal closeModal={closeModal} itemId={selectedItemId} />}
-            {isModalDescriptionOpen && <DescriptionModal closeDescriptionModal={closeDescriptionModal} description={selectedDescription} />}
+            {isModalDescriptionOpen && <DescriptionModal closeDescriptionModal={closeDescriptionModal} description={selectedDescription} itemName={selectedItemName} />}
         </div>
     );
 };

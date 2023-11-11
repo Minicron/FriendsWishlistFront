@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DescriptionModal = ({ closeDescriptionModal, description }) => {
+const DescriptionModal = ({ closeDescriptionModal, description, itemName }) => {
 
     const handleBackgroundClick = (e) => {
         // Vérifiez si le clic provient directement de la div de fond
@@ -25,7 +25,7 @@ const DescriptionModal = ({ closeDescriptionModal, description }) => {
                 </button>
 
                 <div className="mb-4">
-                    <h2 className="text-xl font-bold">Description</h2>
+                    <h2 className="text-xl font-bold">{itemName}</h2>
                 </div>
 
                 <div className="mb-4 h-64 overflow-y-auto rounded-lg p-4">
